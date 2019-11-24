@@ -1,0 +1,51 @@
+# C/C++ with GCC
+# Build your C/C++ project with GCC using make.
+# Add steps that publish test results, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/c-cpp/gcc
+
+trigger:
+- AssimpNet-5.0.0
+
+jobs:
+- job: Linux_x64
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - script: cmake -DBUILD_SHARED_LIBS=ON -DMAKE_BUILD_TYPE=Release -G "Unix Makefiles"
+  - script: make -j4
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: 'lib'
+      ArtifactName: 'linux-x64'
+      publishLocation: 'Container'
+- job: MacOS_x64
+  pool:
+    vmImage: 'macOS-latest'
+  steps:
+  - script: cmake -DBUILD_SHARED_LIBS=ON -DMAKE_BUILD_TYPE=Release -G "Unix Makefiles"
+  - script: make -j4
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: 'lib'
+      ArtifactName: 'osx-x64'
+      publishLocation: 'Container'
+- job: Windows_x86
+  pool:
+    vmImage: 'vs2017-win2016'
+  steps:
+  - script: build_vs2017_win32.bat
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: 'vsprojects/Win32/code/Release/'
+      ArtifactName: 'win-x86'
+      publishLocation: 'Container'
+- job: Windows_x64
+  pool:
+    vmImage: 'vs2017-win2016'
+  steps:
+  - script: build_vs2017_x64.bat
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: 'vsprojects/x64/code/Release/'
+      ArtifactName: 'win-x64'
+      publishLocation: 'Container'

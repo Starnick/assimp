@@ -200,6 +200,11 @@ add_library(zlibstatic STATIC ${ZLIB_SRCS} ${ZLIB_ASMS} ${ZLIB_PUBLIC_HDRS} ${ZL
 set_target_properties(zlib PROPERTIES DEFINE_SYMBOL ZLIB_DLL)
 set_target_properties(zlib PROPERTIES SOVERSION 1)
 
+if(MSVC)
+  set_target_properties(zlib PROPERTIES COMPILE_FLAGS "/MT")
+  set_target_properties(zlibstatic PROPERTIES COMPILE_FLAGS "/MT")
+endif(MSVC)
+
 INSTALL( TARGETS zlibstatic
          LIBRARY DESTINATION ${ASSIMP_LIB_INSTALL_DIR}
          ARCHIVE DESTINATION ${ASSIMP_LIB_INSTALL_DIR}
