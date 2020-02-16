@@ -11,22 +11,22 @@ jobs:
   pool:
     vmImage: 'ubuntu-latest'
   steps:
-  - script: cmake -DBUILD_SHARED_LIBS=ON -DMAKE_BUILD_TYPE=Release -G "Unix Makefiles"
+  - script: cmake -G "Unix Makefiles" -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-s" -DCMAKE_C_FLAGS="-s" -DASSIMP_BUILD_TESTS=OFF -DASSIMP_BUILD_ASSIMP_TOOLS=OFF
   - script: make -j4
   - task: PublishBuildArtifacts@1
     inputs:
-      PathtoPublish: 'lib'
+      PathtoPublish: 'lib/libassimp.so'
       ArtifactName: 'linux-x64'
       publishLocation: 'Container'
 - job: MacOS_x64
   pool:
     vmImage: 'macOS-latest'
   steps:
-  - script: cmake -DBUILD_SHARED_LIBS=ON -DMAKE_BUILD_TYPE=Release -G "Unix Makefiles"
+  - script: cmake -G "Unix Makefiles" -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-s" -DCMAKE_C_FLAGS="-s" -DASSIMP_BUILD_TESTS=OFF -DASSIMP_BUILD_ASSIMP_TOOLS=OFF
   - script: make -j4
   - task: PublishBuildArtifacts@1
     inputs:
-      PathtoPublish: 'lib'
+      PathtoPublish: 'lib/libassimp.dylib'
       ArtifactName: 'osx-x64'
       publishLocation: 'Container'
 - job: Windows_x86
