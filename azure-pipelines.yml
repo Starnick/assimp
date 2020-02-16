@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/c-cpp/gcc
 
 trigger:
-- AssimpNet-5.0.0
+- AssimpNet-5.0.1
 
 jobs:
 - job: Linux_x64
