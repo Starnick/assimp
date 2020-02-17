@@ -13,7 +13,7 @@ if ( MSVC )
   ADD_DEFINITIONS( -D_CRT_SECURE_NO_WARNINGS )
 endif ( MSVC )
 
-IF(CMAKE_SYSTEM_NAME MATCHES "(Darwin|FreeBSD)")
+IF(CMAKE_SYSTEM_NAME MATCHES "(FreeBSD)")
   add_library(IrrXML ${IrrXML_SRCS})
 ELSE()
   add_library(IrrXML STATIC ${IrrXML_SRCS})
