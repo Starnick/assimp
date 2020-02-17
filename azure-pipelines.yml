@@ -12,8 +12,11 @@ jobs:
     vmImage: 'ubuntu-latest'
   steps:
   - script: cmake -G "Unix Makefiles" -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-s" -DCMAKE_C_FLAGS="-s" -DASSIMP_BUILD_TESTS=OFF -DASSIMP_BUILD_ASSIMP_TOOLS=OFF
+    displayName: Configure Make Project
   - script: make -j4
+    displayName: Build Make Project
   - task: PublishBuildArtifacts@1
+    displayName: Publish linux-x64 Artifacts
     inputs:
       PathtoPublish: 'lib/libassimp.so'
       ArtifactName: 'linux-x64'
@@ -23,8 +26,11 @@ jobs:
     vmImage: 'macOS-latest'
   steps:
   - script: cmake -G "Unix Makefiles" -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-s" -DCMAKE_C_FLAGS="-s" -DASSIMP_BUILD_TESTS=OFF -DASSIMP_BUILD_ASSIMP_TOOLS=OFF
+    displayName: Configure Make Project
   - script: make -j4
+    displayName: Build Make Project
   - task: PublishBuildArtifacts@1
+    displayName: Publish osx-x64 Artifacts
     inputs:
       PathtoPublish: 'lib/libassimp.dylib'
       ArtifactName: 'osx-x64'
@@ -34,7 +40,9 @@ jobs:
     vmImage: 'vs2017-win2016'
   steps:
   - script: build_vs2017_win32.bat
+    displayName: Configure/Build win-x86 VS Project
   - task: PublishBuildArtifacts@1
+    displayName: Publish win-x86 Artifacts
     inputs:
       PathtoPublish: 'vsprojects/Win32/code/Release/'
       ArtifactName: 'win-x86'
@@ -44,7 +52,9 @@ jobs:
     vmImage: 'vs2017-win2016'
   steps:
   - script: build_vs2017_x64.bat
+    displayName: Configure/Build win-x64 VS Project
   - task: PublishBuildArtifacts@1
+    displayName: Publish win-x64 Artifacts
     inputs:
       PathtoPublish: 'vsprojects/x64/code/Release/'
       ArtifactName: 'win-x64'
