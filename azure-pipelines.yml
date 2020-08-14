@@ -59,3 +59,10 @@ jobs:
       PathtoPublish: 'vsprojects/x64/code/Release/'
       ArtifactName: 'win-x64'
       publishLocation: 'Container'
+  - task: PublishBuildArtifacts@1
+    displayName: Publish win-x64-debug Artifacts
+    inputs:
+      PathtoPublish: 'vsprojects/x64_debug/code/Debug/'
+      ArtifactName: 'win-x64-debug'
+      publishLocation: 'Container'
+
