@@ -1,0 +1,87 @@
+# Pipeline file for AssimpNet NuGet binaries
+# https://dev.azure.com/nicholaswoodfield/OSS-Libraries/
+
+jobs:
+- job: Linux_x64
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - script: |
+      cmake -B build -S . -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-s" -DCMAKE_C_FLAGS="-s" -DASSIMP_BUILD_TESTS=OFF -DASSIMP_BUILD_ASSIMP_TOOLS=OFF
+      cmake --build build --config Release
+    displayName: Build
+
+  - task: PublishBuildArtifacts@1
+    displayName: Publish linux-x64 Artifacts
+    inputs:
+      PathtoPublish: 'build/bin/libassimp.so'
+      ArtifactName: 'linux-x64'
+      publishLocation: 'Container'
+
+- job: MacOS_x64
+  pool:
+    vmImage: 'macOS-latest'
+  steps:
+  - script: |
+      cmake -B build -S . -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DASSIMP_BUILD_TESTS=OFF -DASSIMP_BUILD_ASSIMP_TOOLS=OFF
+      cmake --build build --config Release
+    displayName: Build
+
+  - task: PublishBuildArtifacts@1
+    displayName: Publish osx-x64 Artifacts
+    inputs:
+      PathtoPublish: 'build/bin/libassimp.dylib'
+      ArtifactName: 'osx-x64'
+      publishLocation: 'Container'
+
+- job: Windows_x86
+  pool:
+    vmImage: 'windows-latest'
+  steps:
+  - script: |
+      cmake -B build -S . -A Win32 -DUSE_STATIC_CRT=ON -DLIBRARY_SUFFIX="" -DASSIMP_INJECT_DEBUG_POSTFIX=OFF -DASSIMP_BUILD_TESTS=OFF -DASSIMP_BUILD_ASSIMP_TOOLS=OFF
+      cmake --build build --config Debug
+      cmake --build build --config Release
+    displayName: Build
+
+  - task: PublishBuildArtifacts@1
+    displayName: Publish win-x86 Artifacts
+    inputs:
+      PathtoPublish: 'build/bin/Release/'
+      ArtifactName: 'win-x86'
+      publishLocation: 'Container'
+      FileCopyOptions: '*.dll *.pdb'
+ 
+  - task: PublishBuildArtifacts@1
+    displayName: Publish win-x64-debug Artifacts
+    inputs:
+      PathtoPublish: 'build/bin/Debug/'
+      ArtifactName: 'win-x86-debug'
+      publishLocation: 'Container'
+      FileCopyOptions: '*.dll *.pdb'
+
+- job: Windows_x64
+  pool:
+    vmImage: 'windows-latest'
+  steps:
+  - script: |
+      cmake -B build -S . -A x64 -DUSE_STATIC_CRT=ON -DLIBRARY_SUFFIX="" -DASSIMP_INJECT_DEBUG_POSTFIX=OFF -DASSIMP_BUILD_TESTS=OFF -DASSIMP_BUILD_ASSIMP_TOOLS=OFF
+      cmake --build build --config Debug
+      cmake --build build --config Release
+    displayName: Build
+
+  - task: PublishBuildArtifacts@1
+    displayName: Publish win-x64 Artifacts
+    inputs:
+      PathtoPublish: 'build/bin/Release/'
+      ArtifactName: 'win-x64'
+      publishLocation: 'Container'
+      FileCopyOptions: '*.dll *.pdb'
+
+  - task: PublishBuildArtifacts@1
+    displayName: Publish win-x64-debug Artifacts
+    inputs:
+      PathtoPublish: 'build/bin/Debug/'
+      ArtifactName: 'win-x64-debug'
+      publishLocation: 'Container'
+      FileCopyOptions: '*.dll *.pdb'
